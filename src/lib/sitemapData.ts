@@ -35,32 +35,62 @@ export const getStatusColor = (status: NodeStatus, customColor?: string): string
 // Initial sitemap data for Solerò Sport Village
 export const initialSitemapData: SitemapData = {
   nodes: [
-    { id: 'Home', label: 'Home', status: 'existing' },
-    { id: 'Struttura', label: 'Struttura', status: 'existing' },
-    { id: 'Servizi', label: 'Servizi', status: 'existing' },
-    { id: 'Contatti', label: 'Contatti', status: 'existing' },
-    { id: 'Palestra', label: 'Palestra', status: 'existing' },
-    { id: 'Piscine', label: 'Piscine', status: 'existing' },
-    { id: 'Fitness', label: 'Fitness', status: 'existing' },
-    { id: 'News', label: 'News', status: 'existing' },
-    { id: 'CorsiNuoto', label: 'Nuoto', status: 'existing' },
-    { id: 'CorsiFitness', label: 'Fitness', status: 'existing' },
-    { id: 'CorsiCrossfit', label: 'Crossfit', status: 'existing' },
-    { id: 'CorsiPadel', label: 'Padel', status: 'existing' },
-    { id: 'PersonalTraining', label: 'Personal Training', status: 'existing' },
-    { id: 'Trattamenti', label: 'Trattamenti', status: 'existing' },
-    { id: 'Mangio', label: 'Mangio', status: 'new' },
-    { id: 'Koala', label: 'Koala', status: 'existing' },
-    { id: 'Giardino', label: 'Giardino', status: 'existing' },
-    { id: 'NoiClub', label: 'Noi Club', status: 'existing' }
+    { id: 'Home', label: 'Home', status: 'existing', x: 200, y: 100 },
+    { id: 'Struttura', label: 'Struttura', status: 'existing', x: 100, y: 200 },
+    { id: 'Servizi', label: 'Servizi', status: 'existing', x: 200, y: 200 },
+    { id: 'Contatti', label: 'Contatti', status: 'existing', x: 300, y: 200 },
+    { id: 'News', label: 'News', status: 'existing', x: 400, y: 200 },
+    
+    { id: 'Palestra', label: 'Palestra', status: 'existing', x: 100, y: 300 },
+    { id: 'Piscine', label: 'Piscine', status: 'existing', x: 200, y: 300 },
+    { id: 'Fitness', label: 'Fitness', status: 'existing', x: 300, y: 300 },
+    
+    { id: 'CorsiNuoto', label: 'Nuoto', status: 'existing', x: 100, y: 400 },
+    { id: 'CorsiFitness', label: 'Fitness', status: 'existing', x: 200, y: 400 },
+    { id: 'CorsiCrossfit', label: 'Crossfit', status: 'existing', x: 300, y: 400 },
+    { id: 'CorsiPadel', label: 'Padel', status: 'existing', x: 400, y: 400 },
+    { id: 'PersonalTraining', label: 'Personal Training', status: 'existing', x: 500, y: 400 },
+    { id: 'Trattamenti', label: 'Trattamenti', status: 'existing', x: 600, y: 400 },
+    { id: 'Mangio', label: 'Mangio', status: 'new', x: 100, y: 500 },
+    { id: 'Koala', label: 'Koala', status: 'existing', x: 200, y: 500 },
+    { id: 'Giardino', label: 'Giardino', status: 'existing', x: 300, y: 500 },
+    { id: 'NoiClub', label: 'Noi Club', status: 'existing', x: 400, y: 500 },
+    
+    { id: 'Crossfit', label: 'Crossfit', status: 'existing', x: 100, y: 600 },
+    { id: 'Padel', label: 'Padel', status: 'existing', x: 200, y: 600 },
+    { id: 'CorsiCalisthenics', label: 'Calisthenics', status: 'existing', x: 300, y: 600 },
+    { id: 'CorsiKombat', label: 'Kombat', status: 'existing', x: 400, y: 600 },
+    { id: 'CorsiKids', label: 'Kids', status: 'existing', x: 500, y: 600 },
+    
+    { id: 'CorsiDanzaAerea', label: 'Danza Aerea', status: 'existing', x: 100, y: 700 },
+    { id: 'CorsiFunzionale', label: 'Funzionale', status: 'existing', x: 200, y: 700 },
+    { id: 'CorsiOlisticWorkout', label: 'Olistic Workout', status: 'existing', x: 300, y: 700 },
+    { id: 'CorsiPilates', label: 'Pilates', status: 'existing', x: 400, y: 700 },
+    
+    { id: 'CorsiGinnasticaPosturale', label: 'Ginnastica Posturale', status: 'existing', x: 100, y: 800 },
+    { id: 'CorsiTonificazione', label: 'Tonificazione', status: 'existing', x: 200, y: 800 },
+    { id: 'CorsiWalking', label: 'Walking', status: 'existing', x: 300, y: 800 },
+    { id: 'CorsiYoga', label: 'Yoga', status: 'existing', x: 400, y: 800 },
+    
+    { id: 'CorsiZumba', label: 'Zumba', status: 'existing', x: 100, y: 900 },
+    { id: 'CorsiGinnasticaDolce', label: 'Ginnastica Dolce', status: 'existing', x: 200, y: 900 },
+    { id: 'CorsiCheerFitness', label: 'Cheer Fitness', status: 'existing', x: 300, y: 900 },
+    { id: 'CorsiPoleDance', label: 'Pole Dance', status: 'existing', x: 400, y: 900 },
+    
+    { id: 'CorsiBoxe', label: 'Boxe', status: 'existing', x: 100, y: 1000 },
+    { id: 'CorsiMuayThai', label: 'Muay Thai', status: 'existing', x: 200, y: 1000 },
+    { id: 'CorsiJudoKids', label: 'Judo Kids', status: 'existing', x: 300, y: 1000 },
   ],
   edges: [
     { source: 'Home', target: 'Struttura' },
     { source: 'Home', target: 'Servizi' },
     { source: 'Home', target: 'Contatti' },
+    { source: 'Home', target: 'News' },
+    
     { source: 'Servizi', target: 'Palestra' },
     { source: 'Servizi', target: 'Piscine' },
     { source: 'Servizi', target: 'Fitness' },
+    
     { source: 'Servizi', target: 'CorsiNuoto' },
     { source: 'Servizi', target: 'CorsiFitness' },
     { source: 'Servizi', target: 'CorsiCrossfit' },
@@ -71,7 +101,29 @@ export const initialSitemapData: SitemapData = {
     { source: 'Servizi', target: 'Koala' },
     { source: 'Servizi', target: 'Giardino' },
     { source: 'Servizi', target: 'NoiClub' },
-    { source: 'Home', target: 'News' }
+    
+    { source: 'Fitness', target: 'Crossfit' },
+    { source: 'Fitness', target: 'Padel' },
+    
+    { source: 'CorsiFitness', target: 'CorsiCalisthenics' },
+    { source: 'CorsiFitness', target: 'CorsiKombat' },
+    { source: 'CorsiFitness', target: 'CorsiKids' },
+    { source: 'CorsiFitness', target: 'CorsiDanzaAerea' },
+    { source: 'CorsiFitness', target: 'CorsiFunzionale' },
+    { source: 'CorsiFitness', target: 'CorsiOlisticWorkout' },
+    { source: 'CorsiFitness', target: 'CorsiPilates' },
+    { source: 'CorsiFitness', target: 'CorsiGinnasticaPosturale' },
+    { source: 'CorsiFitness', target: 'CorsiTonificazione' },
+    { source: 'CorsiFitness', target: 'CorsiWalking' },
+    { source: 'CorsiFitness', target: 'CorsiYoga' },
+    { source: 'CorsiFitness', target: 'CorsiZumba' },
+    { source: 'CorsiFitness', target: 'CorsiGinnasticaDolce' },
+    { source: 'CorsiFitness', target: 'CorsiCheerFitness' },
+    { source: 'CorsiFitness', target: 'CorsiPoleDance' },
+    
+    { source: 'CorsiKombat', target: 'CorsiBoxe' },
+    { source: 'CorsiKombat', target: 'CorsiMuayThai' },
+    { source: 'CorsiKombat', target: 'CorsiJudoKids' },
   ]
 };
 

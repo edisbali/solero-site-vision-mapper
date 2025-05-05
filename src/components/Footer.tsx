@@ -1,9 +1,11 @@
 
 import { Button } from "@/components/ui/button";
+
 const Footer = () => {
   const handlePreviewClick = () => {
     window.open("https://cdn.prod.website-files.com/65772a4150fc91181591a1e5/6818a9c5d7e7ad21f5c02069_RIG_PVT_SOLEROSPORTVILLAGE.pdf", "_blank");
   };
+  
   return <footer className="bg-gray-100 w-full py-12 mt-16">
       <div className="container mx-auto">
         <div className="flex flex-col items-center justify-center mb-12">
@@ -76,4 +78,5 @@ const Footer = () => {
       </div>
     </footer>;
 };
+
 export default Footer;

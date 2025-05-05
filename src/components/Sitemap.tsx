@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSitemap } from "@/hooks/useSitemap";
-import { DEFAULT_NODE_COLORS, SitemapNode } from "@/lib/sitemapData";
+import { DEFAULT_NODE_COLORS, SitemapNode, NodeStatus } from "@/lib/sitemapData";
 import { Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -45,7 +45,7 @@ const Sitemap = () => {
   const [newNodeForm, setNewNodeForm] = useState({
     id: "",
     label: "",
-    status: "existing" as "existing" | "new" | "removing",
+    status: "existing" as NodeStatus,
     description: "",
     color: "",
   });
@@ -53,7 +53,7 @@ const Sitemap = () => {
   const [editNodeForm, setEditNodeForm] = useState({
     id: "",
     label: "",
-    status: "existing" as "existing" | "new" | "removing",
+    status: "existing" as NodeStatus,
     description: "",
     color: "",
   });
@@ -197,7 +197,7 @@ const Sitemap = () => {
           <div className="animate-pulse text-lg text-gray-600">Caricamento mappa...</div>
         </div>
       ) : (
-        <div id="sitemap-container" ref={containerRef} className="mb-8"></div>
+        <div id="sitemap-container" ref={containerRef} className="mb-8 h-[600px] bg-gray-100 rounded-xl"></div>
       )}
 
       <div className="flex flex-wrap gap-4 justify-center">
@@ -244,7 +244,7 @@ const Sitemap = () => {
                 </Label>
                 <Select
                   value={newNodeForm.status}
-                  onValueChange={(value: "existing" | "new" | "removing") =>
+                  onValueChange={(value: NodeStatus) =>
                     setNewNodeForm({ ...newNodeForm, status: value })
                   }
                 >
@@ -355,7 +355,7 @@ const Sitemap = () => {
                   </Label>
                   <Select
                     value={editNodeForm.status}
-                    onValueChange={(value: "existing" | "new" | "removing") =>
+                    onValueChange={(value: NodeStatus) =>
                       setEditNodeForm({ ...editNodeForm, status: value })
                     }
                   >

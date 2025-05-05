@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import cytoscape from "cytoscape";
-import { SitemapData, SitemapNode, SitemapEdge, getStatusColor, initialSitemapData } from "@/lib/sitemapData";
+import { SitemapData, SitemapNode, SitemapEdge, getStatusColor, initialSitemapData, NodeStatus } from "@/lib/sitemapData";
 import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "solero-sitemap-data";
@@ -47,9 +47,9 @@ export const useSitemap = () => {
           const nodes = nodesData.map(node => ({
             id: node.id.toString(),
             label: node.label,
-            status: node.status || "existing",
+            status: node.status as NodeStatus || "existing",
             description: node.description || "",
-            color: node.color || getStatusColor(node.status || "existing"),
+            color: node.color || getStatusColor(node.status as NodeStatus || "existing"),
             x: node.position_x,
             y: node.position_y,
           }));
@@ -168,7 +168,6 @@ export const useSitemap = () => {
         // Only run the layout if nodes don't have positions
         animate: false,
         fit: true,
-        randomize: !sitemapData.nodes.some(node => node.x && node.y),
       },
     });
 
