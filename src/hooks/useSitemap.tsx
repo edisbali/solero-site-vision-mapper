@@ -218,16 +218,31 @@ export const useSitemap = () => {
       await supabase.from('sitemap_edges').delete().neq('id', '00000000-0000-0000-0000-000000000000');
       await supabase.from('sitemap_nodes').delete().neq('id', 0);
       
-      // Then insert all nodes
-      const nodesForDb = sitemapData.nodes.map(node => ({
-        id: parseInt(node.id),
-        label: node.label,
-        status: node.status,
-        description: node.description,
-        color: node.color,
-        position_x: node.x,
-        position_y: node.y
-      }));
+      // Log the nodes before insertion to debug
+      console.log("Nodes to insert:", sitemapData.nodes);
+      
+      // Then insert all nodes WITHOUT the id field
+      const nodesForDb = sitemapData.nodes.map(node => {
+        // Create a new object without the id field
+        const { id, ...nodeWithoutId } = {
+          // Convert string id to number if needed for comparison
+          id: parseInt(node.id),
+          label: node.label,
+          status: node.status,
+          description: node.description,
+          color: node.color,
+          position_x: node.x,
+          position_y: node.y
+        };
+        
+        // Log individual node payload
+        console.log("Node without id:", nodeWithoutId);
+        
+        return nodeWithoutId;
+      });
+      
+      // Log the final insert payload
+      console.log("Final nodes insert payload:", nodesForDb);
       
       const { error: nodesError } = await supabase
         .from('sitemap_nodes')
@@ -238,11 +253,47 @@ export const useSitemap = () => {
         return false;
       }
       
-      // Then insert all edges
-      const edgesForDb = sitemapData.edges.map(edge => ({
-        source: edge.source,
-        target: edge.target
-      }));
+      // Fetch the newly inserted nodes to get their assigned IDs
+      const { data: insertedNodes, error: fetchError } = await supabase
+        .from('sitemap_nodes')
+        .select('id, label');
+        
+      if (fetchError) {
+        console.error("Error fetching inserted nodes:", fetchError);
+        return false;
+      }
+      
+      console.log("Inserted nodes with generated IDs:", insertedNodes);
+      
+      // Create a mapping from node labels to their database IDs
+      const nodeIdMapping = new Map();
+      insertedNodes?.forEach(node => {
+        nodeIdMapping.set(node.label, node.id);
+      });
+      
+      // Then insert all edges using the assigned node IDs
+      const edgesForDb = [];
+      
+      for (const edge of sitemapData.edges) {
+        // Find the source and target nodes
+        const sourceNode = sitemapData.nodes.find(n => n.id === edge.source);
+        const targetNode = sitemapData.nodes.find(n => n.id === edge.target);
+        
+        if (sourceNode && targetNode) {
+          // Get the assigned database IDs for these nodes
+          const sourceDbId = nodeIdMapping.get(sourceNode.label);
+          const targetDbId = nodeIdMapping.get(targetNode.label);
+          
+          if (sourceDbId && targetDbId) {
+            edgesForDb.push({
+              source: sourceDbId.toString(),
+              target: targetDbId.toString()
+            });
+          }
+        }
+      }
+      
+      console.log("Edges to insert:", edgesForDb);
       
       const { error: edgesError } = await supabase
         .from('sitemap_edges')
