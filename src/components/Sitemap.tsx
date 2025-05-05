@@ -23,6 +23,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSitemap } from "@/hooks/useSitemap";
 import { DEFAULT_NODE_COLORS, SitemapNode } from "@/lib/sitemapData";
+import { Save } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Sitemap = () => {
   const {
@@ -35,8 +37,11 @@ const Sitemap = () => {
     getSelectedNode,
     getConnectedNodes,
     resetSitemap,
+    saveToSupabase,
+    isLoading
   } = useSitemap();
 
+  const { toast } = useToast();
   const [newNodeForm, setNewNodeForm] = useState({
     id: "",
     label: "",
@@ -55,6 +60,7 @@ const Sitemap = () => {
 
   const [selectedConnections, setSelectedConnections] = useState<string[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleNewNodeSubmit = () => {
     if (!newNodeForm.id || !newNodeForm.label) return;
@@ -130,6 +136,35 @@ const Sitemap = () => {
     }
   };
 
+  const handleSaveToSupabase = async () => {
+    setIsSaving(true);
+    try {
+      const success = await saveToSupabase();
+      if (success) {
+        toast({
+          title: "Salvato con successo",
+          description: "La mappa del sito è stata salvata nel database.",
+          variant: "default",
+        });
+      } else {
+        toast({
+          title: "Errore durante il salvataggio",
+          description: "Si è verificato un errore. Controlla la console per i dettagli.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error saving to Supabase:", error);
+      toast({
+        title: "Errore durante il salvataggio",
+        description: "Si è verificato un errore imprevisto.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <section id="sitemap" className="py-16 container mx-auto">
       <h2 className="text-3xl font-bold mb-2 text-center">Mappa del Sito Interattiva</h2>
@@ -152,12 +187,18 @@ const Sitemap = () => {
           <span className="text-sm">Sezioni da eliminare</span>
         </div>
         <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full" style={{ background: 'linear-gradient(45deg, #ff0092, #ff66b8)' }} className="mr-2"></div>
+          <div className="w-4 h-4 rounded-full bg-[#ff0092] mr-2"></div>
           <span className="text-sm">Colori personalizzati</span>
         </div>
       </div>
 
-      <div id="sitemap-container" ref={containerRef} className="mb-8"></div>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-[600px] bg-gray-100 rounded-xl">
+          <div className="animate-pulse text-lg text-gray-600">Caricamento mappa...</div>
+        </div>
+      ) : (
+        <div id="sitemap-container" ref={containerRef} className="mb-8"></div>
+      )}
 
       <div className="flex flex-wrap gap-4 justify-center">
         <Dialog>
@@ -407,8 +448,24 @@ const Sitemap = () => {
           </Dialog>
         )}
         
-        <Button variant="outline" onClick={resetSitemap}>
+        <Button 
+          variant="outline" 
+          onClick={resetSitemap}
+        >
           Ripristina Default
+        </Button>
+        
+        <Button 
+          className="bg-solero hover:bg-solero-dark" 
+          disabled={isSaving}
+          onClick={handleSaveToSupabase}
+        >
+          {isSaving ? "Salvando..." : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Salva Modifiche
+            </>
+          )}
         </Button>
       </div>
       

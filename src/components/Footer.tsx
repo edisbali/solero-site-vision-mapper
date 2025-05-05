@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 const Footer = () => {
   const handlePreviewClick = () => {
@@ -36,24 +37,27 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-3 text-solero">Contatti</h4>
             <p className="text-sm text-gray-600">
-              Via Santa Croce, 17<br />
-              22100, Como, Italia<br />
-              <a href="mailto:info@righello.it" className="text-solero">info@righello.it</a><br />
-              <a href="tel:+390312095626" className="text-solero">+39 339 399 8351</a>
+              Cordenons, Italy<br />
+              <a href="mailto:hello@wearerighello.com" className="text-solero">hello@wearerighello.com</a><br />
+              <a href="tel:+393393998351" className="text-solero">+39 339 399 8351</a><br />
+              PIVA 01979970934
             </p>
           </div>
           
           <div>
             <h4 className="font-semibold mb-3 text-solero">Social</h4>
-            <div className="flex space-x-3">
+            <div className="flex flex-col space-y-2">
               <a href="https://www.instagram.com/wearerighello/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-solero">
                 Instagram
               </a>
-              <a href="https://www.facebook.com/wearerighello" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-solero">
+              <a href="https://www.facebook.com/profile.php?id=61555504917325" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-solero">
                 Facebook
               </a>
-              <a href="https://www.linkedin.com/company/wearerighello/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-solero">
+              <a href="https://www.linkedin.com/company/101447512/admin/dashboard/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-solero">
                 LinkedIn
+              </a>
+              <a href="https://www.tiktok.com/login?redirect_url=https%3A%2F%2Fwww.tiktok.com%2F%40wearerighello&lang=en&enter_method=mandatory" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-solero">
+                TikTok
               </a>
             </div>
           </div>
@@ -61,9 +65,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-3 text-solero">Policy</h4>
             <ul className="text-sm space-y-2">
-              <li><a href="#" className="text-gray-600 hover:text-solero">Privacy Policy</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-solero">Cookie Policy</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-solero">Termini e Condizioni</a></li>
+              <li><a href="https://www.wearerighello.com/privacy-policy" className="text-gray-600 hover:text-solero">Privacy & Cookie Policy</a></li>
             </ul>
           </div>
         </div>
