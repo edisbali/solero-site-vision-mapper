@@ -14,19 +14,19 @@ export type Database = {
           created_at: string | null
           id: string
           source: string
-          target: string | null
+          target: string
         }
         Insert: {
           created_at?: string | null
           id?: string
-          source?: string
-          target?: string | null
+          source: string
+          target: string
         }
         Update: {
           created_at?: string | null
           id?: string
           source?: string
-          target?: string | null
+          target?: string
         }
         Relationships: []
       }

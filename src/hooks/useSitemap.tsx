@@ -55,8 +55,8 @@ export const useSitemap = () => {
           }));
           
           const edges = edgesData.map(edge => ({
-            source: edge.source.toString(),
-            target: edge.target.toString(),
+            source: edge.source,
+            target: edge.target,
           }));
           
           setSitemapData({ nodes, edges });
@@ -214,64 +214,63 @@ export const useSitemap = () => {
 
   const saveToSupabase = async () => {
     try {
-      // First, we need to clear existing data to avoid duplicates
+      console.log("Starting Supabase save operation");
+      
+      // First, delete existing data to avoid duplicates
       await supabase.from('sitemap_edges').delete().neq('id', '00000000-0000-0000-0000-000000000000');
       await supabase.from('sitemap_nodes').delete().neq('id', 0);
       
-      // Log the nodes before insertion to debug
-      console.log("Nodes to insert:", sitemapData.nodes);
+      console.log("Deleted existing data");
       
-      // Then insert all nodes WITHOUT the id field
+      // Prepare nodes WITHOUT id field to let Supabase handle identity columns
       const nodesForDb = sitemapData.nodes.map(node => {
-        // Create a new object without the id field
-        const { id, ...nodeWithoutId } = {
-          // Convert string id to number if needed for comparison
-          id: parseInt(node.id),
+        // Create a node object without the id field
+        const { label, status, description, color, x, y } = {
           label: node.label,
           status: node.status,
-          description: node.description,
-          color: node.color,
-          position_x: node.x,
-          position_y: node.y
+          description: node.description || "",
+          color: node.color || getStatusColor(node.status),
+          x: node.x,
+          y: node.y
         };
         
-        // Log individual node payload
-        console.log("Node without id:", nodeWithoutId);
-        
-        return nodeWithoutId;
+        return {
+          label,
+          status,
+          description,
+          color,
+          position_x: x,
+          position_y: y
+        };
       });
       
-      // Log the final insert payload
-      console.log("Final nodes insert payload:", nodesForDb);
+      console.log("Prepared nodes for insertion:", nodesForDb);
       
-      const { error: nodesError } = await supabase
+      // Insert nodes and get the result with generated IDs
+      const { data: insertedNodes, error: nodesError } = await supabase
         .from('sitemap_nodes')
-        .insert(nodesForDb);
+        .insert(nodesForDb)
+        .select();
       
       if (nodesError) {
         console.error("Error saving nodes to Supabase:", nodesError);
         return false;
       }
       
-      // Fetch the newly inserted nodes to get their assigned IDs
-      const { data: insertedNodes, error: fetchError } = await supabase
-        .from('sitemap_nodes')
-        .select('id, label');
-        
-      if (fetchError) {
-        console.error("Error fetching inserted nodes:", fetchError);
+      if (!insertedNodes || insertedNodes.length === 0) {
+        console.error("No nodes were inserted or returned");
         return false;
       }
       
-      console.log("Inserted nodes with generated IDs:", insertedNodes);
+      console.log("Successfully inserted nodes:", insertedNodes);
       
       // Create a mapping from node labels to their database IDs
       const nodeIdMapping = new Map();
-      insertedNodes?.forEach(node => {
+      insertedNodes.forEach(node => {
         nodeIdMapping.set(node.label, node.id);
       });
       
-      // Then insert all edges using the assigned node IDs
+      // Prepare edges using the node label mapping
       const edgesForDb = [];
       
       for (const edge of sitemapData.edges) {
@@ -284,26 +283,33 @@ export const useSitemap = () => {
           const sourceDbId = nodeIdMapping.get(sourceNode.label);
           const targetDbId = nodeIdMapping.get(targetNode.label);
           
-          if (sourceDbId && targetDbId) {
+          if (sourceDbId !== undefined && targetDbId !== undefined) {
             edgesForDb.push({
               source: sourceDbId.toString(),
               target: targetDbId.toString()
             });
+          } else {
+            console.warn(`Could not find DB ID for edge: ${sourceNode.label} -> ${targetNode.label}`);
           }
         }
       }
       
       console.log("Edges to insert:", edgesForDb);
       
-      const { error: edgesError } = await supabase
-        .from('sitemap_edges')
-        .insert(edgesForDb);
-      
-      if (edgesError) {
-        console.error("Error saving edges to Supabase:", edgesError);
-        return false;
+      if (edgesForDb.length > 0) {
+        const { error: edgesError } = await supabase
+          .from('sitemap_edges')
+          .insert(edgesForDb);
+        
+        if (edgesError) {
+          console.error("Error saving edges to Supabase:", edgesError);
+          return false;
+        }
+      } else {
+        console.warn("No edges to insert");
       }
       
+      console.log("Successfully saved sitemap data to Supabase");
       return true;
     } catch (error) {
       console.error("Error in Supabase save operation:", error);
